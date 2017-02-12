@@ -23,4 +23,6 @@ include 'smack-core',
 		'smack-android-extensions',
 		'smack-java7',
 		'smack-integration-test',
-		'smack-repl'
+		'smack-repl',
+		'smack-openpgp',
+		'smack-openpgp-bouncycastle'
