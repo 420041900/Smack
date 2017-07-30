@@ -35,7 +35,7 @@ import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.SmackException.NotLoggedInException;
 import org.jivesoftware.smack.SmackFuture;
-import org.jivesoftware.smack.SmackFuture.InternalSmackFuture;
+import org.jivesoftware.smack.SmackFuture.InternalProcessStanzaSmackFuture;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPConnectionRegistry;
 import org.jivesoftware.smack.XMPPException.XMPPErrorException;
@@ -178,12 +178,12 @@ public final class PingManager extends Manager {
         return type == XMPPError.Type.CANCEL && condition == XMPPError.Condition.feature_not_implemented;
     }
 
-    public SmackFuture<Boolean> pingAsync(Jid jid) {
+    public SmackFuture<Boolean, Exception> pingAsync(Jid jid) {
         return pingAsync(jid, connection().getReplyTimeout());
     }
 
-    public SmackFuture<Boolean> pingAsync(final Jid jid, long pongTimeout) {
-        final InternalSmackFuture<Boolean> future = new InternalSmackFuture<Boolean>() {
+    public SmackFuture<Boolean, Exception> pingAsync(final Jid jid, long pongTimeout) {
+        final InternalProcessStanzaSmackFuture<Boolean, Exception> future = new InternalProcessStanzaSmackFuture<Boolean, Exception>() {
             @Override
             public void handleStanza(Stanza packet) throws NotConnectedException, InterruptedException {
                 setResult(true);
