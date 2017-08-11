@@ -251,7 +251,7 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
     }
 
     /**
-     * A simple version of InternalSmackFuture which implements {@link #isNonFatalException(E)} as always returning
+     * A simple version of InternalSmackFuture which implements isNonFatalException(E) as always returning
      * <code>false</code> method.
      *
      * @param <V>

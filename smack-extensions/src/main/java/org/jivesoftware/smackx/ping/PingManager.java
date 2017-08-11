@@ -33,7 +33,6 @@ import org.jivesoftware.smack.Manager;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
-import org.jivesoftware.smack.SmackException.NotLoggedInException;
 import org.jivesoftware.smack.SmackFuture;
 import org.jivesoftware.smack.SmackFuture.ExceptionCallback;
 import org.jivesoftware.smack.SmackFuture.InternalProcessStanzaSmackFuture;
@@ -213,7 +212,6 @@ public final class PingManager extends Manager {
                 }
                 catch (NotConnectedException | InterruptedException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
                 }
             }
         });

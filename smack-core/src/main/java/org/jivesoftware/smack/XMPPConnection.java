@@ -504,6 +504,12 @@ public interface XMPPConnection {
     public boolean hasFeature(String element, String namespace);
 
 
+    /**
+     * Send an IQ request asynchronously.
+     *
+     * @param request the IQ request.
+     * @return a SmackFuture for the request.
+     */
     public SmackFuture<IQ, Exception> sendIqRequestAsync(IQ request);
 
     public SmackFuture<IQ, Exception> sendIqRequestAsync(IQ request, long timeout);

@@ -1532,6 +1532,7 @@ public abstract class AbstractXMPPConnection implements XMPPConnection {
         return sendAsync(stanza, replyFilter, getReplyTimeout());
     }
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     @Override
     public <S extends Stanza> SmackFuture<S, Exception> sendAsync(S stanza, final StanzaFilter replyFilter, long timeout) {
         Objects.requireNonNull(stanza, "stanza must not be null");
