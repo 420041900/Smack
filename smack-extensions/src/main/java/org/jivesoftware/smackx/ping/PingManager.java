@@ -183,10 +183,11 @@ public final class PingManager extends Manager {
         return pingAsync(jid, connection().getReplyTimeout());
     }
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     public SmackFuture<Boolean, Exception> pingAsync(final Jid jid, long pongTimeout) {
         final InternalProcessStanzaSmackFuture<Boolean, Exception> future = new InternalProcessStanzaSmackFuture<Boolean, Exception>() {
             @Override
-            public void handleStanza(Stanza packet) throws NotConnectedException, InterruptedException {
+            public void handleStanza(Stanza packet) {
                 setResult(true);
             }
             @Override
@@ -203,19 +204,14 @@ public final class PingManager extends Manager {
         };
 
         Ping ping = new Ping(jid);
-        SmackFuture<IQ, Exception> iqFuture = connection().sendIqRequestAsync(ping, pongTimeout);
-        iqFuture.onSuccess(new SuccessCallback<IQ>() {
+        connection().sendIqRequestAsync(ping, pongTimeout)
+        .onSuccess(new SuccessCallback<IQ>() {
             @Override
             public void onSuccess(IQ result) {
-                try {
-                    future.processStanza(result);
-                }
-                catch (NotConnectedException | InterruptedException e) {
-                    // TODO Auto-generated catch block
-                }
+                future.processStanza(result);
             }
-        });
-        iqFuture.onError(new ExceptionCallback<Exception>() {
+        })
+        .onError(new ExceptionCallback<Exception>() {
             @Override
             public void processException(Exception exception) {
                 future.processException(exception);

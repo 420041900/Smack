@@ -22,7 +22,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.SmackFuture.InternalProcessStanzaSmackFuture;
 import org.jivesoftware.smack.SmackFuture.SimpleInternalProcessStanzaSmackFuture;
 import org.jivesoftware.smack.packet.Stanza;
@@ -32,10 +31,10 @@ import org.junit.Test;
 public class SmackFutureTest {
 
     @Test
-    public void simpleSmackFutureSuccessTest() throws NotConnectedException, InterruptedException, ExecutionException {
+    public void simpleSmackFutureSuccessTest() throws InterruptedException, ExecutionException {
         InternalProcessStanzaSmackFuture<Boolean, Exception> future = new SimpleInternalProcessStanzaSmackFuture<Boolean, Exception>() {
             @Override
-            protected void handleStanza(Stanza stanza) throws NotConnectedException, InterruptedException {
+            protected void handleStanza(Stanza stanza) {
                 setResult(true);
             }
         };
@@ -49,7 +48,7 @@ public class SmackFutureTest {
     public void simpleSmackFutureTimeoutTest() throws InterruptedException, ExecutionException, TimeoutException {
         InternalProcessStanzaSmackFuture<Boolean, Exception> future = new SimpleInternalProcessStanzaSmackFuture<Boolean, Exception>() {
             @Override
-            protected void handleStanza(Stanza stanza) throws NotConnectedException, InterruptedException {
+            protected void handleStanza(Stanza stanza) {
             }
         };
 

@@ -505,17 +505,39 @@ public interface XMPPConnection {
 
 
     /**
-     * Send an IQ request asynchronously.
+     * Send an IQ request asynchronously. The connection's default reply timeout will be used.
      *
-     * @param request the IQ request.
-     * @return a SmackFuture for the request.
+     * @param request the IQ request to send.
+     * @return a SmackFuture for the response.
      */
     public SmackFuture<IQ, Exception> sendIqRequestAsync(IQ request);
 
+    /**
+     * Send an IQ request asynchronously.
+     * 
+     * @param request the IQ request to send.
+     * @param timeout the reply timeout in milliseconds.
+     * @return a SmackFuture for the response.
+     */
     public SmackFuture<IQ, Exception> sendIqRequestAsync(IQ request, long timeout);
 
+    /**
+     * Send a stanza asynchronously, waiting for exactly one response stanza using the given reply filter. The connection's default reply timeout will be used.
+     *
+     * @param stanza the stanza to send. 
+     * @param replyFilter the filter used for the response stanza.
+     * @return a SmackFuture for the response.
+     */
     public <S extends Stanza> SmackFuture<S, Exception> sendAsync(S stanza, StanzaFilter replyFilter);
 
+    /**
+     * Send a stanza asynchronously, waiting for exactly one response stanza using the given reply filter.
+     *
+     * @param stanza the stanza to send. 
+     * @param replyFilter the filter used for the response stanza.
+     * @param timeout the reply timeout in milliseconds.
+     * @return a SmackFuture for the response.
+     */
     public <S extends Stanza> SmackFuture<S, Exception> sendAsync(S stanza, StanzaFilter replyFilter, long timeout);
 
     /**
@@ -532,6 +554,7 @@ public interface XMPPConnection {
      * @throws NotConnectedException
      * @throws InterruptedException 
      */
+    // TODO: Mark deprecated in favor of the new SmackFuture based async API.
     public void sendStanzaWithResponseCallback(Stanza stanza, StanzaFilter replyFilter,
                     StanzaListener callback) throws NotConnectedException, InterruptedException;
 
@@ -550,6 +573,7 @@ public interface XMPPConnection {
      * @throws NotConnectedException
      * @throws InterruptedException 
      */
+    // TODO: Mark deprecated in favor of the new SmackFuture based async API.
     public void sendStanzaWithResponseCallback(Stanza stanza, StanzaFilter replyFilter, StanzaListener callback,
                     ExceptionCallback exceptionCallback) throws NotConnectedException, InterruptedException;
 
@@ -569,6 +593,7 @@ public interface XMPPConnection {
      * @throws NotConnectedException
      * @throws InterruptedException 
      */
+    // TODO: Mark deprecated in favor of the new SmackFuture based async API.
     public void sendStanzaWithResponseCallback(Stanza stanza, StanzaFilter replyFilter,
                     final StanzaListener callback, final ExceptionCallback exceptionCallback,
                     long timeout) throws NotConnectedException, InterruptedException;
@@ -583,6 +608,7 @@ public interface XMPPConnection {
      * @throws NotConnectedException
      * @throws InterruptedException 
      */
+    // TODO: Mark deprecated in favor of the new SmackFuture based async API.
     public void sendIqWithResponseCallback(IQ iqRequest, StanzaListener callback) throws NotConnectedException, InterruptedException;
 
     /**
@@ -599,6 +625,7 @@ public interface XMPPConnection {
      * @throws NotConnectedException
      * @throws InterruptedException 
      */
+    // TODO: Mark deprecated in favor of the new SmackFuture based async API.
     public void sendIqWithResponseCallback(IQ iqRequest, StanzaListener callback,
                     ExceptionCallback exceptionCallback) throws NotConnectedException, InterruptedException;
 
@@ -617,6 +644,7 @@ public interface XMPPConnection {
      * @throws NotConnectedException
      * @throws InterruptedException 
      */
+    // TODO: Mark deprecated in favor of the new SmackFuture based async API.
     public void sendIqWithResponseCallback(IQ iqRequest, final StanzaListener callback,
                     final ExceptionCallback exceptionCallback, long timeout)
                     throws NotConnectedException, InterruptedException;

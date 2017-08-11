@@ -28,7 +28,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.packet.Stanza;
 
 public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
@@ -68,19 +67,16 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
         return result != null;
     }
 
-    public void onSuccessOrError(SuccessCallback<V> successCallback, ExceptionCallback<E> exceptionCallback) {
+    public SmackFuture<V, E> onSuccess(SuccessCallback<V> successCallback) {
         this.successCallback = successCallback;
-        this.exceptionCallback = exceptionCallback;
-
         maybeInvokeCallbacks();
+        return this;
     }
 
-    public void onSuccess(SuccessCallback<V> successCallback) {
-        onSuccessOrError(successCallback, null);
-    }
-
-    public void onError(ExceptionCallback<E> exceptionCallback) {
-        onSuccessOrError(null, exceptionCallback);
+    public SmackFuture<V, E> onError(ExceptionCallback<E> exceptionCallback) {
+        this.exceptionCallback = exceptionCallback;
+        maybeInvokeCallbacks();
+        return this;
     }
 
     private final V getOrThrowExecutionException() throws ExecutionException {
@@ -229,7 +225,7 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
          */
         protected abstract boolean isNonFatalException(E exception);
 
-        protected abstract void handleStanza(Stanza stanza) throws NotConnectedException, InterruptedException;
+        protected abstract void handleStanza(Stanza stanza);
 
         @Override
         public synchronized final void processException(E exception) {
@@ -245,7 +241,7 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
          * Wrapper method for {@link #handleStanza(Stanza)}. Note that this method is <code>synchronized</code>.
          */
         @Override
-        public synchronized final void processStanza(Stanza stanza) throws NotConnectedException, InterruptedException {
+        public synchronized final void processStanza(Stanza stanza) {
             handleStanza(stanza);
         }
     }
