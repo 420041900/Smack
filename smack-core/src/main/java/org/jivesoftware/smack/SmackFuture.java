@@ -157,7 +157,7 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
             public Thread newThread(Runnable r) {
                 Thread thread = new Thread(r);
                 thread.setDaemon(true);
-                thread.setName("MiniDnsFuture Thread");
+                thread.setName("SmackFuture Thread");
                 return thread;
             }
         };

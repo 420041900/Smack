@@ -35,7 +35,9 @@ import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.SmackException.NotLoggedInException;
 import org.jivesoftware.smack.SmackFuture;
+import org.jivesoftware.smack.SmackFuture.ExceptionCallback;
 import org.jivesoftware.smack.SmackFuture.InternalProcessStanzaSmackFuture;
+import org.jivesoftware.smack.SmackFuture.SuccessCallback;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPConnectionRegistry;
 import org.jivesoftware.smack.XMPPException.XMPPErrorException;
@@ -202,13 +204,25 @@ public final class PingManager extends Manager {
         };
 
         Ping ping = new Ping(jid);
-        try {
-            XMPPConnection connection = getAuthenticatedConnectionOrThrow();
-            connection.sendIqWithResponseCallback(ping, future, future, pongTimeout);
-        }
-        catch (NotLoggedInException | NotConnectedException | InterruptedException e) {
-            future.processException(e);
-        }
+        SmackFuture<IQ, Exception> iqFuture = connection().sendIqRequestAsync(ping, pongTimeout);
+        iqFuture.onSuccess(new SuccessCallback<IQ>() {
+            @Override
+            public void onSuccess(IQ result) {
+                try {
+                    future.processStanza(result);
+                }
+                catch (NotConnectedException | InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+        iqFuture.onError(new ExceptionCallback<Exception>() {
+            @Override
+            public void processException(Exception exception) {
+                future.processException(exception);
+            }
+        });
 
         return future;
     }

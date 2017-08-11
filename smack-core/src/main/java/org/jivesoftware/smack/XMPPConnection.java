@@ -503,6 +503,15 @@ public interface XMPPConnection {
      */
     public boolean hasFeature(String element, String namespace);
 
+
+    public SmackFuture<IQ, Exception> sendIqRequestAsync(IQ request);
+
+    public SmackFuture<IQ, Exception> sendIqRequestAsync(IQ request, long timeout);
+
+    public <S extends Stanza> SmackFuture<S, Exception> sendAsync(S stanza, StanzaFilter replyFilter);
+
+    public <S extends Stanza> SmackFuture<S, Exception> sendAsync(S stanza, StanzaFilter replyFilter, long timeout);
+
     /**
      * Send a stanza and wait asynchronously for a response by using <code>replyFilter</code>.
      * <p>
