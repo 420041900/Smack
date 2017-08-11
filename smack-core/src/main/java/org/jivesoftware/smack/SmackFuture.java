@@ -176,6 +176,7 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
         EXECUTOR_SERVICE = executorService;
     }
 
+    @SuppressWarnings("FutureReturnValueIgnored")
     protected final synchronized void maybeInvokeCallbacks() {
         if (cancelled) {
             return;
