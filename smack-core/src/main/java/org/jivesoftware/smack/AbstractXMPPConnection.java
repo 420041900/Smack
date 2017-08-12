@@ -1540,12 +1540,14 @@ public abstract class AbstractXMPPConnection implements XMPPConnection {
             @Override
             public void run() {
                 boolean removed = removeAsyncStanzaListener(stanzaListener);
-                // If the packetListener got removed, then it was never run and
-                // we never received a response, inform the exception callback
                 if (!removed) {
+                    // We lost a race against the stanza listener, he already removed itself because he received a
+                    // reply. There is nothing more to do here.
                     return;
                 }
 
+                // If the packetListener got removed, then it was never run and
+                // we never received a response, inform the exception callback
                 Exception exception;
                 if (!isConnected()) {
                     // If the connection is no longer connected, throw a not connected exception.
