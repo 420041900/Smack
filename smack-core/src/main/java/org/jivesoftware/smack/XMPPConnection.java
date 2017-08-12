@@ -439,7 +439,7 @@ public interface XMPPConnection {
 
     /**
      * Send an IQ request asynchronously.
-     * 
+     *
      * @param request the IQ request to send.
      * @param timeout the reply timeout in milliseconds.
      * @return a SmackFuture for the response.
@@ -449,7 +449,7 @@ public interface XMPPConnection {
     /**
      * Send a stanza asynchronously, waiting for exactly one response stanza using the given reply filter. The connection's default reply timeout will be used.
      *
-     * @param stanza the stanza to send. 
+     * @param stanza the stanza to send.
      * @param replyFilter the filter used for the response stanza.
      * @return a SmackFuture for the response.
      */
@@ -458,7 +458,7 @@ public interface XMPPConnection {
     /**
      * Send a stanza asynchronously, waiting for exactly one response stanza using the given reply filter.
      *
-     * @param stanza the stanza to send. 
+     * @param stanza the stanza to send.
      * @param replyFilter the filter used for the response stanza.
      * @param timeout the reply timeout in milliseconds.
      * @return a SmackFuture for the response.
@@ -498,7 +498,7 @@ public interface XMPPConnection {
      * @throws NotConnectedException
      * @throws InterruptedException 
      */
-    // TODO: Mark deprecated in favor of the new SmackFuture based async API.
+    // TODO: Mark deprecated in favor of the new SmackFuture based async API. And do not forget to mark smack.ExceptionCallback deprecated too.
     public void sendStanzaWithResponseCallback(Stanza stanza, StanzaFilter replyFilter, StanzaListener callback,
                     ExceptionCallback exceptionCallback) throws NotConnectedException, InterruptedException;
 
