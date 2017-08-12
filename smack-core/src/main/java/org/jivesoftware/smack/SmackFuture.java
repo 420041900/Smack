@@ -29,8 +29,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.jivesoftware.smack.packet.Stanza;
+import org.jivesoftware.smack.util.CallbackRecipient;
+import org.jivesoftware.smack.util.ExceptionCallback;
+import org.jivesoftware.smack.util.SuccessCallback;
 
-public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
+public abstract class SmackFuture<V, E extends Exception> implements Future<V>, CallbackRecipient<V, E> {
 
     private boolean cancelled;
 
@@ -38,9 +41,9 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
 
     protected E exception;
 
-    private SmackFuture.SuccessCallback<V> successCallback;
+    private SuccessCallback<V> successCallback;
 
-    private SmackFuture.ExceptionCallback<E> exceptionCallback;
+    private ExceptionCallback<E> exceptionCallback;
 
     @Override
     public synchronized final boolean cancel(boolean mayInterruptIfRunning) {
@@ -67,13 +70,15 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
         return result != null;
     }
 
-    public SmackFuture<V, E> onSuccess(SuccessCallback<V> successCallback) {
+    @Override
+    public CallbackRecipient<V, E> onSuccess(SuccessCallback<V> successCallback) {
         this.successCallback = successCallback;
         maybeInvokeCallbacks();
         return this;
     }
 
-    public SmackFuture<V, E> onError(ExceptionCallback<E> exceptionCallback) {
+    @Override
+    public CallbackRecipient<V, E> onError(ExceptionCallback<E> exceptionCallback) {
         this.exceptionCallback = exceptionCallback;
         maybeInvokeCallbacks();
         return this;
@@ -258,18 +263,6 @@ public abstract class SmackFuture<V, E extends Exception> implements Future<V> {
         protected boolean isNonFatalException(E exception) {
             return false;
         }
-    }
-
-    public interface SuccessCallback<T> {
-
-        public void onSuccess(T result);
-
-    }
-
-    public interface ExceptionCallback<E> {
-
-        public void processException(E exception);
-
     }
 
     public static <V, E extends Exception> SmackFuture<V, E> from(V result) {
